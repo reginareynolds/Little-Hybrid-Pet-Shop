@@ -49,7 +49,8 @@ class Game:
         # pyxel.image(0).load(0, 0, "Assets/pet_shop.pyxel")
         # self.x = 0
         self.test = 0
-
+        self.animRate = 4
+        self.listened = False
 
         pyxel.run(self.update, self.draw)
 
@@ -59,22 +60,29 @@ class Game:
 
     #     self.update_npc()
     #
-    # def update_npc(self):
+    def update_npc(self):
+        if(pyxel.btn(pyxel.KEY_SPACE)):
+            self.listened = True
 
 
 
     def draw(self):
-        pyxel.cls(7)
+        pyxel.cls(13)
 
-        if(self.test <10):
-            pyxel.blt(0, 8, 0, 16, 0, 16, 16, 7)
-            self.test = self.test + 1
-        elif(self.test < 20):
-            pyxel.blt(0, 8, 0, 32, 0, 16, 16, 7)
-            self.test = self.test + 1
-        elif(self.test == 20):
-            pyxel.blt(0, 8, 0, 16, 0, 16, 16, 7)
-            self.test = 0
+        if(True):
+            pyxel.text(8, 3, "Little", 0)
+            pyxel.text(8, 10, "Hybrid", 0)
+            pyxel.text(5, 17, "Pet Shop", 0)
+
+        # if(self.test < self.animRate):
+        #     pyxel.blt(0, 8, 0, 16, 0, 16, 16, 7)
+        #     self.test = self.test + 1
+        # elif(self.test < (2 * self.animRate)):
+        #     pyxel.blt(0, 8, 0, 32, 0, 16, 16, 7)
+        #     self.test = self.test + 1
+        # elif(self.test == (2 * self.animRate)):
+        #     pyxel.blt(0, 8, 0, 16, 0, 16, 16, 7)
+        #     self.test = 0
 
         # pyxel.rect(self.x, 0, self.x + 7, 7, 9)
 
