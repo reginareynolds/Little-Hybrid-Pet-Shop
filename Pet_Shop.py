@@ -75,7 +75,6 @@ class Game:
     def update_menu(self):
         # Implement hover effect for menu buttons
         if(self.menu): # Menu is open
-
             for i in range(3):
                 x = self.submenu[i][0]
                 y = self.submenu[i][1]
@@ -84,14 +83,20 @@ class Game:
                 else:
                     diff = 14
 
+                # Is cursor hovering over a menu option?
                 if((x <= pyxel.mouse_x <= (x+diff)) and (y <= pyxel.mouse_y <= (y+4)) and not self.submenu_hover[i]):
                     self.submenu[i][1] = self.submenu[i][1] - 2
                     self.submenu_hover[i] = True
+                    print("y= " , self.submenu[i][1])
+                    print(pyxel.mouse_x, pyxel.mouse_y)
 
-                # # Button has been hovered over
-                # if(self.submenu_hover[0]):
-                #     if(pyxel.mouse_x>75 or pyxel.mouse_x<45 or pyxel.mouse_y>(self.submenu[0][1]+4))
-                # # return(x, y, message)
+                # Cursor has hovred over a menu option
+                if(self.submenu_hover[i]):
+                    # Cursor has left menu option
+                    if(pyxel.mouse_x>(x+diff) or pyxel.mouse_x<x or pyxel.mouse_y > (y+6) or pyxel.mouse_y < y):
+                        self.submenu[i][1] = self.submenu[i][1] + 2
+                        self.submenu_hover[i] = False
+                # return(x, y, message)
 
         # Redirect based on button selection
 
