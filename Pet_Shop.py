@@ -43,14 +43,22 @@ from pyxel import editor
 
 class Game:
     def __init__(self):
-        pyxel.init(40, 30, caption= "Little Hybrid Pet Shop")
+        self.width = 120
+        self.height = 90
+
+        pyxel.init(self.width, self.height, caption="Little Hybrid Pet Shop", scale=10)
 
         pyxel.load("Assets/pet_shop.pyxel")
         # pyxel.image(0).load(0, 0, "Assets/pet_shop.pyxel")
         # self.x = 0
+        self.menu = True
         self.test = 0
         self.animRate = 4
         self.listened = False
+        self.submenu = [[(45/120)*self.width, (17/30)*self.height, "New Game"], [(53/120)*self.width, (2/3)*self.height, "Save"], [(53/120)*self.width, (23/30)*self.height, "Load"]]
+
+        self.menu = [((28/120) * self.width, (1/3) * self.height, 0, 63), ((41/120)*self.width, (5/12) * self.height, 66, 38)]
+        pyxel.mouse(True)
 
         pyxel.run(self.update, self.draw)
 
@@ -58,8 +66,30 @@ class Game:
         if pyxel.btnp(pyxel.KEY_Q):
             pyxel.quit()
 
+        self.update_menu()
+        # for i, v in enumerate(self.submenu):
+        #     self.submenu[i]= self.update_menu(*v)
     #     self.update_npc()
     #
+    def update_menu(self):
+        # Implement hover effect for menu buttons
+        if(self.menu): # Menu is open
+            # New game
+            if(( 45<= pyxel.mouse_x <= 75) and (51 <= pyxel.mouse_y <= 55)):
+                self.submenu[0][1] = self.submenu[0][1] - 2
+
+            # Save
+            elif((53 <= pyxel.mouse_x <= 67) and (60 <= pyxel.mouse_y <= 64)):
+                self.submenu[1][1] = self.submenu[1][1] - 2
+
+            # Load
+            elif(( 53<= pyxel.mouse_x <= 67) and (69 <= pyxel.mouse_y <= 73)):
+                self.submenu[2][1] = self.submenu[2][1] - 2
+
+            # return(x, y, message)
+
+        # Redirect based on button selection
+
     def update_npc(self):
         if(pyxel.btn(pyxel.KEY_SPACE)):
             self.listened = True
@@ -69,10 +99,19 @@ class Game:
     def draw(self):
         pyxel.cls(13)
 
+
+        # Main menu
         if(True):
-            pyxel.text(8, 3, "Little", 0)
-            pyxel.text(8, 10, "Hybrid", 0)
-            pyxel.text(5, 17, "Pet Shop", 0)
+            # Title
+            for x, y, imgX, imgX2 in self.menu:
+                pyxel.blt(x, y, 0, imgX, 24, imgX2, 6, 0)
+
+            # Sub menu
+                for x, y, message in self.submenu:
+                    pyxel.text(x, y, message, 7)
+
+        pyxel.line(self.width/2, 0, self.width/2, self.height, 0)
+        # print(pyxel.mouse_x, pyxel.mouse_y)
 
         # if(self.test < self.animRate):
         #     pyxel.blt(0, 8, 0, 16, 0, 16, 16, 7)
