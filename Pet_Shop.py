@@ -56,7 +56,7 @@ class Game:
         self.animRate = 4
         self.listened = False
         self.submenu = [[(45/120)*self.width, (17/30)*self.height, "New Game"], [(53/120)*self.width, (2/3)*self.height, "Save"], [(53/120)*self.width, (23/30)*self.height, "Load"]]
-
+        self.submenu_hover = [False, False, False]
         self.menu = [((28/120) * self.width, (1/3) * self.height, 0, 63), ((41/120)*self.width, (5/12) * self.height, 66, 38)]
         pyxel.mouse(True)
 
@@ -71,22 +71,27 @@ class Game:
         #     self.submenu[i]= self.update_menu(*v)
     #     self.update_npc()
     #
+
     def update_menu(self):
         # Implement hover effect for menu buttons
         if(self.menu): # Menu is open
-            # New game
-            if(( 45<= pyxel.mouse_x <= 75) and (51 <= pyxel.mouse_y <= 55)):
-                self.submenu[0][1] = self.submenu[0][1] - 2
 
-            # Save
-            elif((53 <= pyxel.mouse_x <= 67) and (60 <= pyxel.mouse_y <= 64)):
-                self.submenu[1][1] = self.submenu[1][1] - 2
+            for i in range(3):
+                x = self.submenu[i][0]
+                y = self.submenu[i][1]
+                if(i==0):
+                    diff = 30
+                else:
+                    diff = 14
 
-            # Load
-            elif(( 53<= pyxel.mouse_x <= 67) and (69 <= pyxel.mouse_y <= 73)):
-                self.submenu[2][1] = self.submenu[2][1] - 2
+                if((x <= pyxel.mouse_x <= (x+diff)) and (y <= pyxel.mouse_y <= (y+4)) and not self.submenu_hover[i]):
+                    self.submenu[i][1] = self.submenu[i][1] - 2
+                    self.submenu_hover[i] = True
 
-            # return(x, y, message)
+                # # Button has been hovered over
+                # if(self.submenu_hover[0]):
+                #     if(pyxel.mouse_x>75 or pyxel.mouse_x<45 or pyxel.mouse_y>(self.submenu[0][1]+4))
+                # # return(x, y, message)
 
         # Redirect based on button selection
 
