@@ -1,26 +1,7 @@
 import pyxel
+from pyxel import constants
 import random
 from pyxel import editor
-# from screeninfo import get_monitors
-#
-# for m in get_monitors():
-#     print(str(m))
-
-# pyxel.init(160, 120)
-#
-#
-# def update():
-#     if pyxel.btnp(pyxel.KEY_Q):
-#         pyxel.quit()
-#
-#
-# def draw():
-#     pyxel.cls(0)
-#     pyxel.rect(10, 10, 20, 20, 11)
-#
-# #
-# class Shop:
-#     def __init__(self):
 
 # class Pet:
 #     color = ""
@@ -49,15 +30,14 @@ class Game:
         pyxel.init(self.width, self.height, caption="Little Hybrid Pet Shop", scale=10)
 
         pyxel.load("Assets/pet_shop.pyxel")
-        # pyxel.image(0).load(0, 0, "Assets/pet_shop.pyxel")
-        # self.x = 0
-        self.menu = True
+
+        self.menu_active = True
         self.test = 0
         self.animRate = 4
         self.listened = False
-        self.submenu = [[(45/120)*self.width, (17/30)*self.height, "New Game"], [(53/120)*self.width, (2/3)*self.height, "Save"], [(53/120)*self.width, (23/30)*self.height, "Load"]]
+        self.submenu = [[(9/24)*self.width, (17/30)*self.height, "New Game"], [(53/120)*self.width, (2/3)*self.height, "Save"], [(53/120)*self.width, (23/30)*self.height, "Load"]]
         self.submenu_hover = [False, False, False]
-        self.menu = [((28/120) * self.width, (1/3) * self.height, 0, 63), ((41/120)*self.width, (5/12) * self.height, 66, 38)]
+        self.menu = [((7/30) * self.width, (1/3) * self.height, 0, 63), ((41/120)*self.width, (5/12) * self.height, 66, 38)]
         pyxel.mouse(True)
 
         pyxel.run(self.update, self.draw)
@@ -67,36 +47,38 @@ class Game:
             pyxel.quit()
 
         self.update_menu()
-        # for i, v in enumerate(self.submenu):
-        #     self.submenu[i]= self.update_menu(*v)
+
     #     self.update_npc()
     #
 
+    # Implement hover effect for menu buttons
     def update_menu(self):
-        # Implement hover effect for menu buttons
-        if(self.menu): # Menu is open
+        if(self.menu_active):  # Menu is open
             for i in range(3):
                 x = self.submenu[i][0]
                 y = self.submenu[i][1]
-                if(i==0):
-                    diff = 30
-                else:
-                    diff = 14
+                diff = 14 if i else 30
 
-                # Is cursor hovering over a menu option?
+                # Cursor is hovering over a menu option
                 if((x <= pyxel.mouse_x <= (x+diff)) and (y <= pyxel.mouse_y <= (y+4)) and not self.submenu_hover[i]):
+                    # Activate hover effect
                     self.submenu[i][1] = self.submenu[i][1] - 2
                     self.submenu_hover[i] = True
-                    print("y= " , self.submenu[i][1])
-                    print(pyxel.mouse_x, pyxel.mouse_y)
 
-                # Cursor has hovred over a menu option
+                    # Play hover sound
+                    pyxel.play(0, 3)
+
+                    if pyxel.btnp(constants.MOUSE_LEFT_BUTTON):
+                        self.menu_active = False
+
+                # Cursor has stopped hovering over a menu option
                 if(self.submenu_hover[i]):
-                    # Cursor has left menu option
+                    # Deactivate hover effect
                     if(pyxel.mouse_x>(x+diff) or pyxel.mouse_x<x or pyxel.mouse_y > (y+6) or pyxel.mouse_y < y):
                         self.submenu[i][1] = self.submenu[i][1] + 2
                         self.submenu_hover[i] = False
-                # return(x, y, message)
+
+                    # Play de-hover sound?
 
         # Redirect based on button selection
 
@@ -104,14 +86,11 @@ class Game:
         if(pyxel.btn(pyxel.KEY_SPACE)):
             self.listened = True
 
-
-
     def draw(self):
         pyxel.cls(13)
 
-
         # Main menu
-        if(True):
+        if(self.menu_active):
             # Title
             for x, y, imgX, imgX2 in self.menu:
                 pyxel.blt(x, y, 0, imgX, 24, imgX2, 6, 0)
@@ -119,8 +98,9 @@ class Game:
             # Sub menu
                 for x, y, message in self.submenu:
                     pyxel.text(x, y, message, 7)
+        # else:
+        #     pyxel.line(self.width / 2, 0, self.width / 2, self.height, 0)
 
-        pyxel.line(self.width/2, 0, self.width/2, self.height, 0)
         # print(pyxel.mouse_x, pyxel.mouse_y)
 
         # if(self.test < self.animRate):
@@ -133,6 +113,5 @@ class Game:
         #     pyxel.blt(0, 8, 0, 16, 0, 16, 16, 7)
         #     self.test = 0
 
-        # pyxel.rect(self.x, 0, self.x + 7, 7, 9)
 
 Game()
