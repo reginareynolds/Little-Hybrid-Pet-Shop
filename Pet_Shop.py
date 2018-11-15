@@ -60,14 +60,16 @@ class Game:
                 diff = 14 if i else 30
 
                 # Cursor is hovering over a menu option
-                if((x <= pyxel.mouse_x <= (x+diff)) and (y <= pyxel.mouse_y <= (y+4)) and not self.submenu_hover[i]):
-                    # Activate hover effect
-                    self.submenu[i][1] = self.submenu[i][1] - 2
-                    self.submenu_hover[i] = True
+                if((x <= pyxel.mouse_x <= (x+diff)) and (y <= pyxel.mouse_y <= (y+4))):
+                    if not self.submenu_hover[i]:
+                        # Activate hover effect
+                        self.submenu[i][1] = self.submenu[i][1] - 2
+                        self.submenu_hover[i] = True
 
-                    # Play hover sound
-                    pyxel.play(0, 3)
+                        # Play hover sound
+                        pyxel.play(0, 3)
 
+                    # User has clicked menu option
                     if pyxel.btnp(constants.MOUSE_LEFT_BUTTON):
                         self.menu_active = False
 
