@@ -36,8 +36,10 @@ class Game:
         self.listened = False
         self.submenu = [[(9/24)*self.width, (17/30)*self.height, "New Game"], [(53/120)*self.width, (2/3)*self.height, "Save"], [(53/120)*self.width, (23/30)*self.height, "Load"]]
         self.submenu_hover = [False, False, False]
+        self.submenu_select = [False, False, False]
         self.menu = [((7/30) * self.width, (1/3) * self.height, 0, 63), ((41/120)*self.width, (5/12) * self.height, 66, 38)]
-        self.npc_frame = [[0, 8, 0, 16, 0, 16, 16, 7], [0, 8, 0, 32, 0, 16, 16, 7], [0, 8, 0, 16, 0, 16, 16, 7]]
+        # self.npc_frame = [[0, 8, 0, 16, 0, 16, 16, 7], [0, 8, 0, 32, 0, 16, 16, 7], [0, 8, 0, 16, 0, 16, 16, 7]]
+        self.npc_frame = [0, 8, 0, 16, 0, 16, 16, 7]
 
         pyxel.mouse(True)
 
@@ -50,7 +52,9 @@ class Game:
         self.update_menu()
 
         self.update_game()
-    #     self.update_npc()
+
+        if self.submenu_select[0] and not self.menu_active:
+            self.update_npc()
     #
 
     # Implement hover effect for menu buttons
@@ -74,6 +78,8 @@ class Game:
                     # User has clicked menu option
                     if pyxel.btnp(pyxel.MOUSE_LEFT_BUTTON):
                         self.menu_active = False
+                        self.submenu_select[i] = True
+                        self.submenu_hover[i] = False
 
                 # Cursor has stopped hovering over a menu option
                 if(self.submenu_hover[i]):
@@ -92,20 +98,23 @@ class Game:
     def update_npc(self):
         if(pyxel.btn(pyxel.KEY_SPACE)):
             self.listened = True
-        #
-        # if (self.test < self.animRate):
-        #     self.npc_frame = [0, 8, 0, 16, 0, 16, 16, 7]
-        #     self.test = self.test + 1
-        # elif (self.test < (2 * self.animRate)):
-        #     self.npc_frame = [0, 8, 0, 32, 0, 16, 16, 7]
-        #     self.test = self.test + 1
-        # elif (self.test == (2 * self.animRate)):
-        #     self.npc_frame = [0, 8, 0, 16, 0, 16, 16, 7]
-        #     self.test = 0
+
+        if (self.test < self.animRate):
+            self.npc_frame = [0, 8, 0, 16, 0, 16, 16, 7]
+            self.test = self.test + 1
+        elif (self.test < (2 * self.animRate)):
+            self.npc_frame = [0, 8, 0, 32, 0, 16, 16, 7]
+            self.test = self.test + 1
+        elif (self.test == (2 * self.animRate)):
+            self.npc_frame = [0, 8, 0, 16, 0, 16, 16, 7]
+            pyxel.play(0, 2)
+            self.test = 0
+
 
     def draw(self):
         # Clear screen
         pyxel.cls(13)
+
         # Main menu
         if(self.menu_active):
 
@@ -118,9 +127,11 @@ class Game:
                     pyxel.text(x, y, message, 7)
         else:
             # Menu is closed, redirect based on button selection
-            if (self.submenu_hover[0]):  # New game
-                for x, y, img, u, v, w, h, col in self.npc_frame:
-                    pyxel.blt(x, y, img, u, v, w, h, col)
+            if (self.submenu_select[0]):  # New game
+                x, y, img, u, v, w, h, col = self.npc_frame
+
+                pyxel.blt(x, y, img, u, v, w, h, col)
+                pyxel.text(20,20,"test", 7)
                 # if(self.test < self.animRate):
                 #     pyxel.blt(0, 8, 0, 16, 0, 16, 16, 7)
                 #     self.test = self.test + 1
