@@ -1,5 +1,6 @@
 import pyxel
 import random
+import time
 from pyxel import editor
 
 # class Pet:
@@ -38,6 +39,9 @@ class Game:
         self.submenu_hover = [False, False, False]
         self.submenu_select = [False, False, False]
         self.menu = [((7/30) * self.width, (1/3) * self.height, 0, 63), ((41/120)*self.width, (5/12) * self.height, 66, 38)]
+        self.played = False
+        self.dialogue = [0, 0, ""]
+        self.dialogue_count = 0
         # self.npc_frame = [[0, 8, 0, 16, 0, 16, 16, 7], [0, 8, 0, 32, 0, 16, 16, 7], [0, 8, 0, 16, 0, 16, 16, 7]]
         self.npc_frame = [0, 8, 0, 16, 0, 16, 16, 7]
 
@@ -53,6 +57,7 @@ class Game:
 
         self.update_game()
 
+        # New game clicked, main menu inactive
         if self.submenu_select[0] and not self.menu_active:
             self.update_npc()
     #
@@ -96,19 +101,40 @@ class Game:
 
 
     def update_npc(self):
+        # Has user hit continue?
+        # TODO: Check for key release, this keeps incrementing for the duration that spacebar is held down
         if(pyxel.btn(pyxel.KEY_SPACE)):
             self.listened = True
+            self.dialogue_count = self.dialogue_count + 1
 
-        if (self.test < self.animRate):
-            self.npc_frame = [0, 8, 0, 16, 0, 16, 16, 7]
-            self.test = self.test + 1
-        elif (self.test < (2 * self.animRate)):
-            self.npc_frame = [0, 8, 0, 32, 0, 16, 16, 7]
-            self.test = self.test + 1
-        elif (self.test == (2 * self.animRate)):
-            self.npc_frame = [0, 8, 0, 16, 0, 16, 16, 7]
-            pyxel.play(0, 2)
-            self.test = 0
+
+        # play voice sound
+        if(self.played is False):
+            # 120 speed is 1 second per tone, figure out a way to time the sound lengths based on their speed
+            start = time.time()
+            print("start")
+            pyxel.play(0, 4)
+            end = time.time()
+            print("end")
+            print(end-start)
+            self.played = True
+
+        if(self.listened is False):
+            self.dialogue = [[5, 56, "Today is your first day\nrunning the pet shop."], [5, 56, "I'll go over some of the responsibilities."]]
+            # I'm going to go over some of the responsibilities really quickly before I leave you to it.
+            # Click a pet to see more information about it.
+            # Click two pets to mate them.
+            # See what crazy combos you can come up with!
+            # play animation
+            if (self.test < self.animRate):
+                self.npc_frame = [0, 8, 0, 16, 0, 16, 16, 7]
+                self.test = self.test + 1
+            elif (self.test < (2 * self.animRate)):
+                self.npc_frame = [0, 8, 0, 32, 0, 16, 16, 7]
+                self.test = self.test + 1
+            elif (self.test == (2 * self.animRate)):
+                self.npc_frame = [0, 8, 0, 16, 0, 16, 16, 7]
+                # self.test = 0
 
 
     def draw(self):
@@ -131,16 +157,9 @@ class Game:
                 x, y, img, u, v, w, h, col = self.npc_frame
 
                 pyxel.blt(x, y, img, u, v, w, h, col)
-                pyxel.text(20,20,"test", 7)
-                # if(self.test < self.animRate):
-                #     pyxel.blt(0, 8, 0, 16, 0, 16, 16, 7)
-                #     self.test = self.test + 1
-                # elif(self.test < (2 * self.animRate)):
-                #     pyxel.blt(0, 8, 0, 32, 0, 16, 16, 7)
-                #     self.test = self.test + 1
-                # elif(self.test == (2 * self.animRate)):
-                #     pyxel.blt(0, 8, 0, 16, 0, 16, 16, 7)
-                #     self.test = 0
+
+                x, y, message = self.dialogue[self.dialogue_count]
+                pyxel.text(x, y, message, 7)
 
 
             elif (self.submenu_hover[1]):  # Save game
@@ -155,7 +174,7 @@ class Game:
         # else:
         #     pyxel.line(self.width / 2, 0, self.width / 2, self.height, 0)
 
-        # print(pyxel.mouse_x, pyxel.mouse_y)
+        print(pyxel.mouse_x, pyxel.mouse_y)
 
 
 
