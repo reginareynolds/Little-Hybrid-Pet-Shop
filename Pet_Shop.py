@@ -34,10 +34,10 @@ class Game:
         self.menu_active = True
         self.animLoop = 0
         self.animRate = 4
-        self.submenu = [[(9/24)*self.width, (17/30)*self.height, "New Game"], [(53/120)*self.width, (2/3)*self.height, "Save"], [(53/120)*self.width, (23/30)*self.height, "Load"]]
+        self.submenu = [[(9/24), (17/30), "New Game"], [(53/120), (2/3), "Save"], [(53/120), (23/30), "Load"]]
         self.submenu_hover = [False, False, False]
         self.submenu_select = [False, False, False]
-        self.menu = [((7/30) * self.width, (1/3) * self.height, 0, 63), ((41/120)*self.width, (5/12) * self.height, 66, 38)]
+        self.menu = [((7/30), (1/3), 0, 63), ((41/120), (5/12), 66, 38)]
         self.played = False
         self.start = 1
         self.listened = False
@@ -52,7 +52,11 @@ class Game:
 
         pyxel.mouse(True)
 
+        # Play theme song
+        pyxel.playm(0, loop=True)
         pyxel.run(self.update, self.draw)
+
+        # TODO: Keep theme song from conflicting with sound effects like menu hover
 
     def update(self):
         if pyxel.btnp(pyxel.KEY_Q):
@@ -93,7 +97,7 @@ class Game:
                 # Cursor has stopped hovering over a menu option
                 if(self.submenu_hover[i]):
                     # Deactivate hover effect
-                    if(pyxel.mouse_x> (x+diff) or pyxel.mouse_x < x or pyxel.mouse_y > (y+6) or pyxel.mouse_y < y):
+                    if(pyxel.mouse_x > (x+diff) or pyxel.mouse_x < x or pyxel.mouse_y > (y+6) or pyxel.mouse_y < y):
                         self.submenu[i][1] = self.submenu[i][1] + 2
                         self.submenu_hover[i] = False
 
@@ -109,6 +113,7 @@ class Game:
             # Reset event flags
             self.played = False
             self.listened = False
+            self.animLoop = 0
 
             # Stop playing dialogue sound to prevent possible overlap
             pyxel.stop(0)
@@ -144,14 +149,13 @@ class Game:
 
         # Main menu
         if(self.menu_active):
-
             # Title
             for x, y, imgX, imgX2 in self.menu:
-                pyxel.blt(x, y, 0, imgX, 24, imgX2, 6, 0)
+                pyxel.blt(x * self.width, y * self.height, 0, imgX, 24, imgX2, 6, 0)
 
             # Sub menu
             for x, y, message in self.submenu:
-                pyxel.text(x, y, message, 7)
+                pyxel.text(x * self.width, y * self.height, message, 7)
         else:
             # Menu is closed, redirect based on button selection
             if (self.submenu_select[0]):  # New game
