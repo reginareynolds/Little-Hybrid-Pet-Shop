@@ -74,19 +74,19 @@ class Game:
     def update_menu(self):
         if(self.menu_active):  # Menu is open
             for i in range(3):
-                x = self.submenu[i][0]
-                y = self.submenu[i][1]
+                x = (self.submenu[i][0]) * self.width
+                y = (self.submenu[i][1]) * self.height
                 diff = 14 if i else 30
 
                 # Cursor is hovering over a menu option
                 if((x <= pyxel.mouse_x <= (x+diff)) and (y <= pyxel.mouse_y <= (y+4))):
                     if not self.submenu_hover[i]:
                         # Activate hover effect
-                        self.submenu[i][1] = self.submenu[i][1] - 2
+                        self.submenu[i][1] = (self.submenu[i][1] - (2/self.height))
                         self.submenu_hover[i] = True
 
                         # Play hover sound
-                        pyxel.play(0, 3)
+                        pyxel.play(2, 3)
 
                     # User has clicked menu option
                     if pyxel.btnp(pyxel.MOUSE_LEFT_BUTTON):
@@ -98,7 +98,7 @@ class Game:
                 if(self.submenu_hover[i]):
                     # Deactivate hover effect
                     if(pyxel.mouse_x > (x+diff) or pyxel.mouse_x < x or pyxel.mouse_y > (y+6) or pyxel.mouse_y < y):
-                        self.submenu[i][1] = self.submenu[i][1] + 2
+                        self.submenu[i][1] = self.submenu[i][1] + (2/self.height)
                         self.submenu_hover[i] = False
 
     def update_game(self):
@@ -116,12 +116,12 @@ class Game:
             self.animLoop = 0
 
             # Stop playing dialogue sound to prevent possible overlap
-            pyxel.stop(0)
+            pyxel.stop(2)
 
         # play voice sound
         if(self.played is False):
             # Duration of one tone (s) = rating/120
-            pyxel.play(0, 4)
+            pyxel.play(2, 4)
             self.start = time.time()
             self.played = True
 
