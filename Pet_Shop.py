@@ -45,10 +45,12 @@ class Game:
                          "I'll go over some of the\nresponsibilities.",
                          "Click a pet to see more\ninformation about it.",
                          "Click two pets to mate them.",
-                         "See what crazy combos\nyou can come up with!",
+                         "See what crazy combos you\ncan come up with!",
                          "Okay, I'll leave you to it!"]
         self.dialogue_count = 0
-        self.npc_frame = [0, 8, 0, 16, 0, 16, 16, 7]
+        self.box_height = 69
+        self.npc_frame = [(0, 8, 0, 16, 0, 16, 16, 7), (0, 8, 0, 32, 0, 16, 16, 7)]
+        self.npc_count = 0
 
         pyxel.mouse(True)
 
@@ -104,11 +106,19 @@ class Game:
     def update_game(self):
         pass
 
+    # Implement character animation and dialogue
     def update_npc(self):
         # Has user hit continue?
         if(pyxel.btnr(pyxel.KEY_SPACE)):
-            # Set dialogue
+            # Update dialogue
             self.dialogue_count = self.dialogue_count + 1
+
+            # Update dialogue box
+            count = 0
+            for char in self.dialogue[self.dialogue_count]:
+                if char == '\n':
+                    count = count + 1
+            self.box_height = 52 + count + 4*(count + 1) + 8
 
             # Reset event flags
             self.played = False
@@ -127,20 +137,20 @@ class Game:
 
         # play animation
         if(self.listened is False):
-            # Sound has finished, stop animating
+            # Sound has finished, stop animation
             if((time.time() - self.start) >= (77/60)):
-                self.npc_frame = [0, 8, 0, 16, 0, 16, 16, 7]
+                self.npc_count = 0
                 self.listened = True
 
-            else:  # Sound is still playing, continue animating
+            else:  # Sound is still playing, update animation
                 if (self.animLoop < self.animRate):
-                    self.npc_frame = [0, 8, 0, 16, 0, 16, 16, 7]
+                    self.npc_count = 0
                     self.animLoop = self.animLoop + 1
                 elif ((self.animLoop) < (2 * self.animRate)):
-                    self.npc_frame = [0, 8, 0, 32, 0, 16, 16, 7]
+                    self.npc_count = 1
                     self.animLoop = self.animLoop + 1
-                elif (self.animLoop == ((2 * self.animRate))):
-                    self.npc_frame = [0, 8, 0, 16, 0, 16, 16, 7]
+                elif (self.animLoop == (2 * self.animRate)):
+                    self.npc_count = 0
                     self.animLoop = 0
 
     def draw(self):
@@ -159,18 +169,23 @@ class Game:
         else:
             # Menu is closed, redirect based on button selection
             if (self.submenu_select[0]):  # New game
-                x, y, img, u, v, w, h, col = self.npc_frame
-
                 # draw NPC
+                x, y, img, u, v, w, h, col = self.npc_frame[self.npc_count]
                 pyxel.blt(x, y, img, u, v, w, h, col)
+
+                # draw dialogue box
+                pyxel.rect(3, 52, self.width-4, self.box_height, 2)
+                pyxel.rect(2, 53, self.width-3, self.box_height-1, 2)
 
                 # draw dialogue
                 pyxel.text(5, 56, self.dialogue[self.dialogue_count], 7)
 
             elif (self.submenu_hover[1]):  # Save game
                 pass
+            # TODO: Implemnt game save function
             elif (self.submenu_hover[2]):  # Load game
                 pass
+            # TODO: Implement game load function
 
             # # reset hovering
             # for i in range(len(self.submenu_hover)):
@@ -179,7 +194,7 @@ class Game:
         # else:
         #     pyxel.line(self.width / 2, 0, self.width / 2, self.height, 0)
 
-        # print(pyxel.mouse_x, pyxel.mouse_y)
+        print(pyxel.mouse_x, pyxel.mouse_y)
 
 
 
