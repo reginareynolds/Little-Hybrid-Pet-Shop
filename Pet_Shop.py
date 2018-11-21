@@ -43,12 +43,15 @@ class Game:
         self.listened = False
         self.dialogue = ["Today is your first day\nrunning the pet shop.",
                          "I'll go over some of the\nresponsibilities.",
-                         "Click a pet to see more\ninformation about it.",
+                         "This is a pet. You can click\na pet if you want to see\nmore information about it.",
                          "Click two pets to mate them.",
                          "See what crazy combos you\ncan come up with!",
                          "Okay, I'll leave you to it!"]
+        # TODO: Determine npc_frame value based on what line of self.dialogue is displayed.
         self.dialogue_count = 0
         self.box_height = 69
+        # Duration of one tone (s) = rating/120. Total sound length = rating/120 * # of notes
+        self.voice_length = [((7/120) * 22)]
         self.npc_frame = [(0, 8, 0, 16, 0, 16, 16, 7), (0, 8, 0, 32, 0, 16, 16, 7)]
         self.npc_count = 0
 
@@ -65,8 +68,6 @@ class Game:
             pyxel.quit()
 
         self.update_menu()
-
-        self.update_game()
 
         # New game clicked, main menu inactive
         if self.submenu_select[0] and not self.menu_active:
@@ -103,8 +104,6 @@ class Game:
                         self.submenu[i][1] = self.submenu[i][1] + (2/self.height)
                         self.submenu_hover[i] = False
 
-    def update_game(self):
-        pass
 
     # Implement character animation and dialogue
     def update_npc(self):
@@ -128,12 +127,7 @@ class Game:
             # Stop playing dialogue sound to prevent possible overlap
             pyxel.stop(2)
 
-        # play voice sound
-        if(self.played is False):
-            # Duration of one tone (s) = rating/120
-            pyxel.play(2, 4)
-            self.start = time.time()
-            self.played = True
+        self.voice(4)
 
         # play animation
         if(self.listened is False):
@@ -152,6 +146,13 @@ class Game:
                 elif (self.animLoop == (2 * self.animRate)):
                     self.npc_count = 0
                     self.animLoop = 0
+
+    # play voice sound
+    def voice(self, selection):
+        if(self.played is False):
+            pyxel.play(2, selection)
+            self.start = time.time()
+            self.played = True
 
     def draw(self):
         # Clear screen
