@@ -3,23 +3,93 @@ import random
 import time
 from pyxel import editor
 
-# class Pet:
-#     color = ""
-#     characteristics = ""
-#     personality = ""
-#     lineage = []
-#     breed = ""
-#     sex = ""
-#
-#     def characterize(self):
-#         # Determine sex of pet
-#         if(random.uniform(0.0, 1.0) <  0.5):
-#             self.sex = "XY"
-#         else:
-#             self.sex = "XX"
-#
-#         # Determine family tree
-#         # if(lineage[0]==)
+
+# Global variables:
+# Possible personalities
+personalities = ['Adamant', 'Modest', 'Jolly', 'Timid', 'Impish', 'Bold', 'Careful', 'Calm', 'Lax', 'Gentle', 'Mild', 'Lonely', 'Rash', 'Naughty', 'Brave', 'Quiet', 'Hardy', 'Bashful', 'Docile', 'Quirky', 'Serious']
+
+
+class Pet:
+    def __init__(self, mother=None, father=None):
+        self.sex = self.male_or_female()
+
+        # Initialize variables
+        self.lineage = []
+        self.color = []  # [R, G, B] format
+        self.personality = ""  # String format
+        self.breed = ""
+        self.characteristics = ""  # Size?
+
+        # Create pet
+        self.characterize(mother, father)
+
+    def characterize(self, mom, dad):
+        # Determine family tree
+        if(mom and dad):  # Known parents, base values on heritage
+            # Add parents to family tree
+            self.lineage.append(mom)
+            self.lineage.append(dad)
+
+            # Determine color
+            self.set_color()
+
+            # Determine personality
+            self.set_personality()
+
+            # Determine characteristics
+            # TODO: Define and append characteristics
+        else:  # Unknown parents, create random heritage
+            pass  # TODO: Randomize heritage
+
+    # Determine sex of pet
+    @staticmethod
+    def male_or_female():
+        if(random.uniform(0.0, 1.0) < 0.5):
+            return("XY")
+        else:
+            return("XX")
+
+    # Average R, G, B values of parents and append to color container
+    def set_color(self):
+        i = 0  # Loop variable
+
+        while(i < 3):
+            self.color.append((self.lineage[0].color[i] + self.lineage[1].color[i])//2)
+            i = i + 1
+
+    # Randomly select personality from weighted array of possible temperaments
+    def set_personality(self):
+        # 21 total personalities
+        # 2 parent personalities
+        # 19 (parent personalities are different) or 20 (parent personalities are identical) other personalities
+        # Each parent personality chance = 1/10
+        # Other personality chance = (8/10)*(1/other personalities)
+
+        # Initialize probability array
+        chances = []
+
+        # Determine personality weights
+        if(self.lineage[0].temperament == self.lineage[1].temperament):  # Parent temperaments are identical
+            parent_chance = 2/10
+            other_chance = (8/10) * (1/20)
+        else:  # Parent temperaments are different
+            parent_chance = 1/10
+            other_chance = (8/10) * (1/19)
+
+        # Create array of personality probabilities with preference given to parental temperaments
+        for temperament in personalities:
+            if(temperament == (self.lineage[0].temperament or self.lineage[1].temperament)):  # Matches parental temperament
+                chances.append(parent_chance)
+            else:  # Matches neither parent's temperament
+                chances.append(other_chance)
+
+        # Select temperament
+        self.personality = random.choices(personalities, weights=chances)
+
+    def set_characteristics(self):
+        pass
+        # TODO: Create characteristic set function
+    # Include mutation possibility
 
 
 class Game:
