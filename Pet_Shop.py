@@ -3,21 +3,31 @@ import random
 import time
 from pyxel import editor
 
+# TODO: Age,
+#  Sex,
+#  Heritage,
+#  Color,
+#  Personality,
+#  Breed,
+#  Characteristics,
+#  Name
 
 # Global variables:
 # Possible personalities
-personalities = ['Adamant', 'Modest', 'Jolly', 'Timid', 'Impish', 'Bold', 'Careful', 'Calm', 'Lax', 'Gentle', 'Mild', 'Lonely', 'Rash', 'Naughty', 'Brave', 'Quiet', 'Hardy', 'Bashful', 'Docile', 'Quirky', 'Serious']
+personalities = ['Adamant', 'Modest', 'Jolly', 'Timid', 'Impish', 'Bold', 'Careful', 'Calm', 'Lax', 'Gentle', 'Mild',
+                 'Lonely', 'Rash', 'Naughty', 'Brave', 'Quiet', 'Hardy', 'Bashful', 'Docile', 'Quirky', 'Serious']
 
 
 class Pet:
     def __init__(self, mother=None, father=None):
+        self.age = 0
         self.sex = self.male_or_female()
 
         # Initialize variables
         self.lineage = []
         self.color = []  # [R, G, B] format
         self.personality = ""  # String format
-        self.breed = ""
+        self.breed = ""  # TODO: Create breed list and breed characteristics. Possibly breed classes?
         self.characteristics = ""  # Size?
 
         # Create pet
@@ -89,7 +99,9 @@ class Pet:
     def set_characteristics(self):
         pass
         # TODO: Create characteristic set function
+
     # Include mutation possibility
+    # TODO: Create mutation function
 
 
 class Game:
