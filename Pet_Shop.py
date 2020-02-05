@@ -8,10 +8,17 @@ from pyxel import editor
 #  Characteristics,
 #  Name
 
-# Global variables:
+# GLOBAL VARIABLES:
 # Possible personalities
 personalities = ['Adamant', 'Modest', 'Jolly', 'Timid', 'Impish', 'Bold', 'Careful', 'Calm', 'Lax', 'Gentle', 'Mild',
                  'Lonely', 'Rash', 'Naughty', 'Brave', 'Quiet', 'Hardy', 'Bashful', 'Docile', 'Quirky', 'Serious']
+
+# Possible female names
+f_names = ['Bella', 'Lucy', 'Molly', 'Daisy', 'Maggie', 'Sophie', 'Sadie', 'Chloe', 'Bailey', 'Lola', 'Zoe',
+           'Abby', 'Ginger', 'Roxy', 'Gracie', 'Coco', 'Sasha', 'Lily', 'Angel', 'Princess', 'Emma', 'Annie',
+           'Rosie', 'Ruby', 'Lady', 'Missy', 'Lilly', 'Mia', 'Katie', 'Zoey', 'Madison', 'Stella', 'Penny',
+           'Belle', 'Casey', 'Samantha', 'Holly', 'Lexi', 'Lulu', 'Brandy', 'Jasmine', 'Shelby', 'Sandy', 'Roxie',
+           'Pepper', 'Heidi', 'Luna', 'Dixie', 'Honey', 'Dakota']
 
 # Possible male names
 m_names = ['Bailey', 'Max', 'Charlie', 'Buddy', 'Rocky', 'Jake', 'Jack', 'Toby', 'Cody', 'Buster', 'Duke', 'Cooper',
@@ -20,17 +27,11 @@ m_names = ['Bailey', 'Max', 'Charlie', 'Buddy', 'Rocky', 'Jake', 'Jack', 'Toby',
               'Milo', 'Rudy', 'Louie', 'Hunter', 'Casey', 'Rocco', 'Sparky', 'Joey', 'Bruno', 'Beau', 'Dakota',
               'Maximus', 'Romeo', 'Boomer', 'Luke', 'Henry']
 
-# Possible female names
-f_names = ['Bella', 'Lucy', 'Molly', 'Daisy', 'Maggie', 'Sophie', 'Sadie', 'Chloe', 'Bailey', 'Lola', 'Zoe',
-                'Abby', 'Ginger', 'Roxy', 'Gracie', 'Coco', 'Sasha', 'Lily', 'Angel', 'Princess', 'Emma', 'Annie',
-                'Rosie', 'Ruby', 'Lady', 'Missy', 'Lilly', 'Mia', 'Katie', 'Zoey', 'Madison', 'Stella', 'Penny',
-                'Belle', 'Casey', 'Samantha', 'Holly', 'Lexi', 'Lulu', 'Brandy', 'Jasmine', 'Shelby', 'Sandy', 'Roxie',
-                'Pepper', 'Heidi', 'Luna', 'Dixie', 'Honey', 'Dakota']
 
 class Pet:
     def __init__(self, mother=None, father=None):
         self.age = 0
-        self.sex = self.male_or_female()
+        self.sex = self.female_or_male()
 
         # Initialize variables
         self.lineage = []
@@ -38,6 +39,7 @@ class Pet:
         self.personality = ""  # String format
         self.breed = ""  # TODO: Create breed list and breed characteristics. Possibly breed classes?
         self.characteristics = ""  # Size?
+        self.name = ""
 
         # Create pet
         self.characterize(mother, father)
@@ -55,6 +57,8 @@ class Pet:
             # Determine personality
             self.set_personality()
 
+            # Determine breed
+
             # Determine characteristics
             # TODO: Define and append characteristics
 
@@ -66,11 +70,11 @@ class Pet:
 
     # Determine sex of pet
     @staticmethod
-    def male_or_female():
+    def female_or_male():
         if(random.uniform(0.0, 1.0) < 0.5):
-            return("XY")
+            return("XX")  # Female
         else:
-            return("XX")
+            return("XY")  # Male
 
     # Average R, G, B values of parents and append to color container
     def set_color(self):
@@ -108,6 +112,13 @@ class Pet:
 
         # Select temperament
         self.personality = random.choices(personalities, weights=chances)
+
+    # Randomly select breed from parents' breeds
+    def set_breed(self):
+        if(random.uniform(0.0, 1.0) < 0.5):
+            self.breed = self.lineage[0].breed  # Mother's breed
+        else:
+            self.breed = self.lineage[1].breed  # Father's breed
 
     def set_characteristics(self):
         pass
