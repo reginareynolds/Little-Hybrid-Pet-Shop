@@ -1,0 +1,3 @@
+Possible pet temperaments taken from the Pokemon games
+
+Possible male and female pet names taken from the list of top 100 dog names found at https://dogtime.com/top-100-dog-names, accessed 5 February 2020

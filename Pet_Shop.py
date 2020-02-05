@@ -3,11 +3,7 @@ import random
 import time
 from pyxel import editor
 
-# TODO: Age,
-#  Sex,
-#  Heritage,
-#  Color,
-#  Personality,
+# TODO:
 #  Breed,
 #  Characteristics,
 #  Name
@@ -17,6 +13,19 @@ from pyxel import editor
 personalities = ['Adamant', 'Modest', 'Jolly', 'Timid', 'Impish', 'Bold', 'Careful', 'Calm', 'Lax', 'Gentle', 'Mild',
                  'Lonely', 'Rash', 'Naughty', 'Brave', 'Quiet', 'Hardy', 'Bashful', 'Docile', 'Quirky', 'Serious']
 
+# Possible male names
+m_names = ['Bailey', 'Max', 'Charlie', 'Buddy', 'Rocky', 'Jake', 'Jack', 'Toby', 'Cody', 'Buster', 'Duke', 'Cooper',
+              'Riley', 'Harley', 'Bear', 'Tucker', 'Murphy', 'Lucky', 'Oliver', 'Sam', 'Oscar', 'Teddy', 'Winston',
+              'Sammy', 'Rusty', 'Shadow', 'Gizmo', 'Bentley', 'Zeus', 'Jackson', 'Baxter', 'Bandit', 'Gus', 'Samson',
+              'Milo', 'Rudy', 'Louie', 'Hunter', 'Casey', 'Rocco', 'Sparky', 'Joey', 'Bruno', 'Beau', 'Dakota',
+              'Maximus', 'Romeo', 'Boomer', 'Luke', 'Henry']
+
+# Possible female names
+f_names = ['Bella', 'Lucy', 'Molly', 'Daisy', 'Maggie', 'Sophie', 'Sadie', 'Chloe', 'Bailey', 'Lola', 'Zoe',
+                'Abby', 'Ginger', 'Roxy', 'Gracie', 'Coco', 'Sasha', 'Lily', 'Angel', 'Princess', 'Emma', 'Annie',
+                'Rosie', 'Ruby', 'Lady', 'Missy', 'Lilly', 'Mia', 'Katie', 'Zoey', 'Madison', 'Stella', 'Penny',
+                'Belle', 'Casey', 'Samantha', 'Holly', 'Lexi', 'Lulu', 'Brandy', 'Jasmine', 'Shelby', 'Sandy', 'Roxie',
+                'Pepper', 'Heidi', 'Luna', 'Dixie', 'Honey', 'Dakota']
 
 class Pet:
     def __init__(self, mother=None, father=None):
@@ -48,8 +57,12 @@ class Pet:
 
             # Determine characteristics
             # TODO: Define and append characteristics
+
+            # Determine name
+            # TODO: Prompt for name
         else:  # Unknown parents, create random heritage
             pass  # TODO: Randomize heritage
+            # TODO: Randomize name from list of possible names
 
     # Determine sex of pet
     @staticmethod
