@@ -2,9 +2,6 @@
 
 from Breeds import *
 
-# TODO:
-#  Name
-
 # GLOBAL VARIABLES:
 # Possible personalities
 personalities = ['Adamant', 'Modest', 'Jolly', 'Timid', 'Impish', 'Bold', 'Careful', 'Calm', 'Lax', 'Gentle', 'Mild',
@@ -67,7 +64,6 @@ class Pet:
             # Breed set in randomize_parents function
 
             # Name set in randomize_parents function
-
         # CASE 2: Pet is offspring of owned pets
         elif(mom and dad):  # Known parents, base values on heritage
             # Set age

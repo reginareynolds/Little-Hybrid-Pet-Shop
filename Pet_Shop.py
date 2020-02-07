@@ -183,3 +183,18 @@ class Game:
 
 
 Game()
+
+# TODO: Shop features:
+#  Cages/crates,
+#  floor size,
+#  pricing,
+#  available purchases
+#  Ability to upgrade
+
+# TODO: Pedigree function
+#  Base value adjustment function based on pedigree function
+
+# TODO: Creature icons and animations
+# TODO: Creature calls
+
+# TODO: Fix bug causing jumping menu text when cursor tip is on bottom row of stationary text
