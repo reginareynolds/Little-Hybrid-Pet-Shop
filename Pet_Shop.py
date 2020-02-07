@@ -2,9 +2,9 @@ import pyxel
 import random
 import time
 from pyxel import editor
+from Breeds import *
 
 # TODO:
-#  Breed,
 #  Characteristics,
 #  Name
 
@@ -30,23 +30,27 @@ m_names = ['Bailey', 'Max', 'Charlie', 'Buddy', 'Rocky', 'Jake', 'Jack', 'Toby',
 
 class Pet:
     def __init__(self, mother=None, father=None):
-        self.age = 0
+        self.age = None
         self.sex = self.female_or_male()
 
         # Initialize variables
         self.lineage = []
         self.color = []  # [R, G, B] format
         self.personality = ""  # String format
-        self.breed = ""  # TODO: Create breed list and breed characteristics. Possibly breed classes?
+        self.breed = ""
         self.characteristics = ""  # Size?
         self.name = ""
 
         # Create pet
         self.characterize(mother, father)
 
+    # Determine family tree
     def characterize(self, mom, dad):
-        # Determine family tree
+        # CASE 1: Pet is offspring of owned pets
         if(mom and dad):  # Known parents, base values on heritage
+            # Set age
+            self.age = 0  # Newborn
+
             # Add parents to family tree
             self.lineage.append(mom)
             self.lineage.append(dad)
@@ -58,14 +62,22 @@ class Pet:
             self.set_personality()
 
             # Determine breed
+            self.set_breed()
 
             # Determine characteristics
             # TODO: Define and append characteristics
 
             # Determine name
             # TODO: Prompt for name
+        # CASE 2: Pet is new purchase
         else:  # Unknown parents, create random heritage
-            pass  # TODO: Randomize heritage
+            # Set age
+            self.age = random.uniform(0, 10)  # Randomize age
+
+            # Add random parents to family tree
+            self.randomize_parents()
+
+            # TODO: Randomize heritage
             # TODO: Randomize name from list of possible names
 
     # Determine sex of pet
@@ -97,11 +109,11 @@ class Pet:
 
         # Determine personality weights
         if(self.lineage[0].temperament == self.lineage[1].temperament):  # Parent temperaments are identical
-            parent_chance = 2/10
-            other_chance = (8/10) * (1/20)
+            parent_chance = 2/10  # 20% chance to have same temperament as parent
+            other_chance = (8/10) * (1/20)  # 80% chance to have different temperament than parent; 4% chance for a given different temperament
         else:  # Parent temperaments are different
-            parent_chance = 1/10
-            other_chance = (8/10) * (1/19)
+            parent_chance = 1/10  # 10% chance to have same temperament as a given parent
+            other_chance = (8/10) * (1/19)  # 80% chance to have different temperament than parent; 4.2% chance for a given different temperament
 
         # Create array of personality probabilities with preference given to parental temperaments
         for temperament in personalities:
@@ -124,6 +136,9 @@ class Pet:
         pass
         # TODO: Create characteristic set function
 
+    # Create random heritage
+    def randomize_parents(self):
+        self.lineage
     # Include mutation possibility
     # TODO: Create mutation function
 
