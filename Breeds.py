@@ -1,22 +1,33 @@
 # Different possible breeds, organized into classes
+import random
 
-# TODO: Breed characteristics in ranges?
+
+# Pick size from allowable range
+def set_size(options):
+    choice = random.randint(0, (len(options)-1))
+
+    return(options[choice])
 
 
 class Bouncer:
     def __init__(self):
-        self.size = None
-        self.weight = 0
+        # Create initial ranges
+        self.size = ["Small", "Medium"]
+        self.weight = [5.0, 30.0]
         # self.abilities =
         # self.shape = TODO: pixel shape coordinates
         # self.sound = TODO: creature sound
         self.base_value = 0  # TODO: affected by heritage? purebred could be more valuable
 
+    def characterize(self):
+        self.size = set_size(self.size)
+
+
 
 class Crawler:
     def __init__(self):
-        self.size = None
-        self.weight = 0
+        self.size = ["Small", "Medium", "Large"]
+        self.weight = [5.0, 90.0]
         # self.abilities =
         # self.shape =
         # self.sound =
@@ -25,8 +36,8 @@ class Crawler:
 
 class Hopper:
     def __init__(self):
-        self.size = None
-        self.weight = 0
+        self.size = ["Medium", "Large"]
+        self.weight = [30.0, 90.0]
         # self.abilities =
         # self.shape =
         # self.sound =
@@ -35,10 +46,11 @@ class Hopper:
 
 class Swimmer:
     def __init__(self):
-        self.size = None
-        self.weight = 0
+        self.size = ["Small", "Medium", "Large"]
+        self.weight = [5.0, 90.0]
         # self.abilities =
         # self.shape =
         # self.sound =
         self.base_value = 0
 
+# TODO: Characteristic inherit function?
