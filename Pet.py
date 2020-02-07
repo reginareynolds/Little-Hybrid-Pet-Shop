@@ -1,9 +1,8 @@
-import random
-import time
+# Class representing any given individual pet
+
 from Breeds import *
 
 # TODO:
-#  Characteristics,
 #  Name
 
 # GLOBAL VARIABLES:
@@ -26,64 +25,81 @@ m_names = ['Bailey', 'Max', 'Charlie', 'Buddy', 'Rocky', 'Jake', 'Jack', 'Toby',
               'Maximus', 'Romeo', 'Boomer', 'Luke', 'Henry']
 
 # Base breed possibilities
-bounce = Bouncer()
-crawl = Crawler()
-hop = Hopper()
-swim = Swimmer()
+base_breeds = (Bouncer, Crawler, Hopper, Swimmer)
 
-base_breeds = [bounce, crawl, hop, swim]
 
 class Pet:
-    def __init__(self, mother=None, father=None):
+    def __init__(self, mother=None, father=None, root=None):
         self.age = None
-        self.sex = self.female_or_male()
+        self.sex = None
 
         # Initialize variables
         self.lineage = []
         self.color = []  # [R, G, B] format
         self.personality = ""  # String format
         self.breed = ""
-        self.characteristics = ""  # Size?
         self.name = ""
 
         # Create pet
-        self.characterize(mother, father)
+        self.characterize(mother, father, root)
 
     # Determine family tree
-    def characterize(self, mom, dad):
-        # CASE 1: Pet is offspring of owned pets
-        if(mom and dad):  # Known parents, base values on heritage
+    def characterize(self, mom, dad, root):
+        # CASE 1: Pet is root ancestor
+        if(root):
+            # Set age
+            self.age = random.uniform(5, 10)  # Randomize age. Must be older than offspring
+
+            # Sex set in randomize_parents function
+
+            # Lineage does not exist for root pets
+
+            # Randomize color
+            i = 0  # Loop variable
+
+            while (i < 3):
+                self.color.append(random.randint(0, 256))
+                i = i + 1
+
+            # Randomize personality
+            self.personality = random.choice(personalities)
+
+            # Breed set in randomize_parents function
+
+            # Name set in randomize_parents function
+
+        # CASE 2: Pet is offspring of owned pets
+        elif(mom and dad):  # Known parents, base values on heritage
             # Set age
             self.age = 0  # Newborn
+
+            # Set sex
+            self.sex = self.female_or_male()
 
             # Add parents to family tree
             self.lineage.append(mom)
             self.lineage.append(dad)
 
-            # Determine color
-            self.set_color()
-
-            # Determine personality
-            self.set_personality()
-
-            # Determine breed
-            self.set_breed()
-
-            # Determine characteristics
-            # TODO: Define and append characteristics
+            # Set personal values
+            self.owned_or_bought()
 
             # Determine name
-            # TODO: Prompt for name
-        # CASE 2: Pet is new purchase
+            self.set_name()
+        # CASE 3: Pet is new purchase
         else:  # Unknown parents, create random heritage
             # Set age
-            self.age = random.uniform(0, 10)  # Randomize age
+            self.age = random.uniform(0, 5)  # Randomize age. Must be younger than parents
+
+            # Set sex
+            self.sex = self.female_or_male()
 
             # Add random parents to family tree
             self.randomize_parents()
 
-            # TODO: Randomize heritage
-            # TODO: Randomize name from list of possible names
+            # Set personal values
+            self.owned_or_bought()
+
+            self.set_name(True)
 
     # Determine sex of pet
     @staticmethod
@@ -137,12 +153,51 @@ class Pet:
         else:
             self.breed = self.lineage[1].breed  # Father's breed
 
-    def set_characteristics(self):
-        pass
-        # TODO: Create characteristic set function
+    def owned_or_bought(self):
+        # Determine color
+        self.set_color()
+
+        # Determine personality
+        self.set_personality()
+
+        # Determine breed
+        self.set_breed()
+
+    def set_name(self, randomized=False):
+        if(randomized):  # Name randomly selected from list
+            if(self.sex == "XX"):
+                self.name = random.choice(f_names)
+            else:
+                self.name = random.choice(m_names)
+        else:
+            pass
+            # TODO: Prompt for name
 
     # Create random heritage
     def randomize_parents(self):
-        self.lineage
+        # Create and set parent breed values
+        mom_breed = random.choice(base_breeds)()  # Create instance of random Breed class
+        dad_breed = random.choice(base_breeds)()  # Create instance of random Breed class
+
+        mom_breed.set_values()  # Set dynamic breed values for Breed instance
+        dad_breed.set_values()  # Set dynamic breed values for Breed instance
+
+        # Set parent values
+        mom = Pet(root=True)  # Create instance of root Pet
+        dad = Pet(root=True)  # Create instance of root Pet
+
+        mom.sex = "XX"  # Overwrite Pet.sex
+        dad.sex = "XY"  # Overwrite Pet.sex
+
+        mom.breed = mom_breed  # Set parent breed to Breed instance
+        dad.breed = dad_breed  # Set parent breed to Breed instance
+
+        mom.set_name(True)  # Randomize Pet.name
+        dad.set_name(True)  # Randomize Pet.name
+
+        # Add parents to family tree
+        self.lineage.append(mom)
+        self.lineage.append(dad)
+
     # Include mutation possibility
     # TODO: Create mutation function
