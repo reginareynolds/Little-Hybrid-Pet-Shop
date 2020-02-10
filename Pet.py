@@ -29,6 +29,7 @@ class Pet:
     def __init__(self, mother=None, father=None, root=None):
         self.age = None
         self.sex = None
+        self.mutated = False
 
         # Initialize variables
         self.lineage = []
@@ -52,11 +53,7 @@ class Pet:
             # Lineage does not exist for root pets
 
             # Randomize color
-            i = 0  # Loop variable
-
-            while (i < 3):
-                self.color.append(random.randint(0, 256))
-                i = i + 1
+            self.rand_color()
 
             # Randomize personality
             self.personality = random.choice(personalities)
@@ -78,9 +75,6 @@ class Pet:
 
             # Set personal values
             self.owned_or_bought()
-
-            # Determine name
-            self.set_name()
         # CASE 3: Pet is new purchase
         else:  # Unknown parents, create random heritage
             # Set age
@@ -93,9 +87,7 @@ class Pet:
             self.randomize_parents()
 
             # Set personal values
-            self.owned_or_bought()
-
-            self.set_name(True)
+            self.owned_or_bought(rand_name=True)
 
     # Determine sex of pet
     @staticmethod
@@ -111,6 +103,14 @@ class Pet:
 
         while(i < 3):
             self.color.append((self.lineage[0].color[i] + self.lineage[1].color[i])//2)
+            i = i + 1
+
+    # Create random color values
+    def rand_color(self):
+        i = 0  # Loop variable
+
+        while (i < 3):
+            self.color.append(random.randint(0, 256))
             i = i + 1
 
     # Randomly select personality from weighted array of possible temperaments
@@ -149,7 +149,7 @@ class Pet:
         else:
             self.breed = self.lineage[1].breed  # Father's breed
 
-    def owned_or_bought(self):
+    def owned_or_bought(self, rand_name=False):
         # Determine color
         self.set_color()
 
@@ -158,6 +158,12 @@ class Pet:
 
         # Determine breed
         self.set_breed()
+
+        # Determine name
+        self.set_name(randomized=rand_name)
+
+        # Introduce mutation chance
+        self.mutate()
 
     def set_name(self, randomized=False):
         if(randomized):  # Name randomly selected from list
@@ -188,12 +194,23 @@ class Pet:
         mom.breed = mom_breed  # Set parent breed to Breed instance
         dad.breed = dad_breed  # Set parent breed to Breed instance
 
-        mom.set_name(True)  # Randomize Pet.name
-        dad.set_name(True)  # Randomize Pet.name
+        mom.set_name(randomized=True)  # Randomize Pet.name
+        dad.set_name(randomized=True)  # Randomize Pet.name
 
         # Add parents to family tree
         self.lineage.append(mom)
         self.lineage.append(dad)
 
     # Include mutation possibility
-    # TODO: Create mutation function
+    def mutate(self):
+        if(random.uniform(0.0, 1.0) < 0.005):
+            self.mutated = True
+
+            # Randomize color
+            self.color = []  # Reset color
+            self.rand_color()
+
+            # Randomize personality
+            self.personality = random.choice(personalities)
+
+            # TODO: Increase pet value of mutants
