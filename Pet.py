@@ -125,7 +125,7 @@ class Pet:
         chances = []
 
         # Determine personality weights
-        if(self.lineage[0].temperament == self.lineage[1].temperament):  # Parent temperaments are identical
+        if(self.lineage[0].personality == self.lineage[1].personality):  # Parent temperaments are identical
             parent_chance = 2/10  # 20% chance to have same temperament as parent
             other_chance = (8/10) * (1/20)  # 80% chance to have different temperament than parent; 4% chance for a given different temperament
         else:  # Parent temperaments are different
@@ -134,7 +134,7 @@ class Pet:
 
         # Create array of personality probabilities with preference given to parental temperaments
         for temperament in personalities:
-            if(temperament == (self.lineage[0].temperament or self.lineage[1].temperament)):  # Matches parental temperament
+            if(temperament == (self.lineage[0].personality or self.lineage[1].personality)):  # Matches parental temperament
                 chances.append(parent_chance)
             else:  # Matches neither parent's temperament
                 chances.append(other_chance)
